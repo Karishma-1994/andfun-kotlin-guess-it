@@ -21,6 +21,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -45,7 +46,8 @@ class GameFragment : Fragment() {
     ): View? {
 
         // Inflate view and obtain an instance of the binding class
-        binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false
+        binding = DataBindingUtil.inflate(
+            inflater, R.layout.game_fragment, container, false
         )
         Log.i("GameFragment", "Called viewModelProvider.of!")
         viewModel = ViewModelProviders.of(this).get(GameViewModel::class.java)
@@ -53,13 +55,9 @@ class GameFragment : Fragment() {
 
         binding.correctButton.setOnClickListener {
             viewModel.onCorrect()
-
-
         }
         binding.skipButton.setOnClickListener {
             viewModel.onSkip()
-
-
         }
 
         viewModel.word.observe(viewLifecycleOwner, Observer { newWord ->
@@ -67,7 +65,14 @@ class GameFragment : Fragment() {
 
         })
         viewModel.score.observe(viewLifecycleOwner, Observer { newScore ->
-            binding.scoreText.text = newScore .toString()
+            binding.scoreText.text = newScore.toString()
+        })
+
+        viewModel.gameFinished.observe(viewLifecycleOwner, Observer {hasFinished ->
+            if (hasFinished){
+                gameFinished()
+                viewModel.onGameFinishComplete()
+            }
         })
 
 
@@ -76,8 +81,9 @@ class GameFragment : Fragment() {
     }
 
     private fun gameFinished() {
-        val action = GameFragmentDirections.actionGameToScore(viewModel.score.value?:0)
-        findNavController(this).navigate(action)
+//        val action = GameFragmentDirections.actionGameToScore(viewModel.score.value?:0)
+//        findNavController(this).navigate(action)
+        Toast.makeText(context, "Game Finished", Toast.LENGTH_SHORT).show()
     }
 
     /**
@@ -89,7 +95,6 @@ class GameFragment : Fragment() {
 
 
     /** Methods for updating the UI **/
-
 
 
 }
