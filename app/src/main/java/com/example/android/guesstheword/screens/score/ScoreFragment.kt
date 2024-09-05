@@ -33,6 +33,9 @@ import com.example.android.guesstheword.screens.score.ScoreFragmentArgs.Companio
  * Fragment where the final score is shown, after the game is over
  */
 class ScoreFragment : Fragment() {
+    private lateinit var viewModel: ScoreViewModel
+    private lateinit var viewModelFactory: ScoreViewModelFactory
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -49,6 +52,9 @@ class ScoreFragment : Fragment() {
 
         // Get args using by navArgs property delegate
         val scoreFragmentArgs by navArgs<ScoreFragmentArgs>()
+        viewModelFactory = ScoreViewModelFactory(scoreFragmentArgs.score)
+        viewModel = ViewModelProviders.of(this, viewModelFactory)
+            .get(ScoreViewModel::class.java)
         binding.scoreText.text = scoreFragmentArgs.score.toString()
         binding.playAgainButton.setOnClickListener { onPlayAgain() }
 
