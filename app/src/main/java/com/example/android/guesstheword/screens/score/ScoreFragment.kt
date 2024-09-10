@@ -61,7 +61,6 @@ class ScoreFragment : Fragment() {
         return binding.root
     }
 
-
     private fun onPlayAgain() {
         findNavController().navigate(ScoreFragmentDirections.actionRestart())
     }
